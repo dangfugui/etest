@@ -1,4 +1,4 @@
-package com.dang.etest.core;
+package com.dang.etest.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
-import com.dang.etest.util.FileUtil;
+import com.dang.etest.entity.MethodContext;
 
 /**
  * Description:
@@ -16,7 +16,7 @@ import com.dang.etest.util.FileUtil;
  */
 public class MethodContextUtil {
 
-    static MethodContext find(String path, Method method, Object args) {
+    public static MethodContext find(String path, Method method, Object[] args) {
         File  file= new File(path);
         if(file == null){
             return null;
@@ -26,7 +26,8 @@ public class MethodContextUtil {
             for (String line: list){
                 MethodContext context = JSON.parseObject(line, MethodContext.class);
                 if(context.getMethod().equals(method.getName()) &&
-                        context.getClassName().equals(method.getDeclaringClass().getName())){
+                        context.getClassName().equals(method.getDeclaringClass().getName())&&
+                        JSON.toJSONString(context.getArgs()).equals(JSON.toJSONString(args))){
                     return context;
                 }
             }
@@ -36,7 +37,7 @@ public class MethodContextUtil {
         return null;
     }
 
-    static void save(String path, MethodContext context) throws IOException {
+    public static void save(String path, MethodContext context) throws IOException {
         File file = new File(path);
         if (file == null) {
             FileUtil.createFile(file);

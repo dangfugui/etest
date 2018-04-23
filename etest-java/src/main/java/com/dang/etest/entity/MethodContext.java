@@ -1,8 +1,7 @@
-package com.dang.etest.core;
+package com.dang.etest.entity;
 
 import java.lang.reflect.Method;
 
-import com.dang.etest.util.DigestUtil;
 
 /**
  * Description:
@@ -15,7 +14,6 @@ public class MethodContext {
     private String className;
     private String method;
     private Object [] args;
-    private String argsMd5 = "";
     private Object result;
     private Class resultClass;
     private Throwable throwable;
@@ -33,7 +31,6 @@ public class MethodContext {
             for(Object arg:args){
                 stringBuffer.append(arg);
             }
-            argsMd5 = DigestUtil.toMD5(stringBuffer.toString());
         }
     }
 
@@ -75,14 +72,6 @@ public class MethodContext {
 
     public void setThrowable(Throwable throwable) {
         this.throwable = throwable;
-    }
-
-    public String getArgsMd5() {
-        return argsMd5;
-    }
-
-    public void setArgsMd5(String argsMd5) {
-        this.argsMd5 = argsMd5;
     }
 
     public Class getResultClass() {

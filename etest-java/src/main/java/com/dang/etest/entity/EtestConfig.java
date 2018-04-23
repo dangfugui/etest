@@ -1,4 +1,4 @@
-package com.dang.etest.core;
+package com.dang.etest.entity;
 
 /**
  * Description: etest config
@@ -9,5 +9,6 @@ package com.dang.etest.core;
 public class EtestConfig {
 
     public static String methodImageDir =  System. getProperty ("user.dir") + "/src/test/java/";
+    public static String docDir =  System. getProperty ("user.dir") + "/src/test/java/";
 
 }
