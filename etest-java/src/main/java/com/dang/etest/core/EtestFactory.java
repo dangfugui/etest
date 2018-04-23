@@ -40,7 +40,11 @@ public class EtestFactory {
             }
             clazz = clazz.getSuperclass();
         }
-        obj = (T) ProxyMethod.createInstance(obj,useClassName);     // 返回代理对象
+        try {
+            obj = (T) ProxyMethod.createInstance(obj,useClassName);     // 返回代理对象
+        } catch (Exception e) {
+            return obj;
+        }
         return obj;
     }
 

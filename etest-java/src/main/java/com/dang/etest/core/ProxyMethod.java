@@ -10,11 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.dang.etest.entity.DocMethod;
 import com.dang.etest.entity.EtestConfig;
-import com.dang.etest.util.DocUtil;
-
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
+import com.dang.etest.util.DocUtil;;import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.ProxyFactory;
 
 /**
  * Description: 代理对象的方法拦截器
@@ -23,7 +20,7 @@ import net.sf.cglib.proxy.MethodProxy;
  * @Author dangqihe
  * @Date Create in 2018/4/23
  */
-public class ProxyMethod implements MethodInterceptor {
+public class ProxyMethod implements MethodHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ProxyMethod.class);
     private Object targetObject;
     private String path;            //   文档文件路径
@@ -45,8 +42,32 @@ public class ProxyMethod implements MethodInterceptor {
     }
 
 
+
+    //创建一个方法来完成创建代理对象
+    static Object createInstance(Object targetObject,String useClassName)
+            throws IllegalAccessException, InstantiationException {
+        ProxyMethod proxyMethod = new ProxyMethod();
+        proxyMethod.path = EtestConfig.docDir + useClassName.replaceAll("\\.","/") + ".md";
+        proxyMethod.targetObject = targetObject;   //  => 设置代理对象
+        // 代理工厂
+        ProxyFactory proxyFactory = new ProxyFactory();
+        // 设置需要创建子类的父类
+        proxyFactory.setSuperclass(targetObject.getClass());
+        proxyFactory.setHandler(proxyMethod);
+        return proxyFactory.createClass().newInstance();  //创建代理类对象.
+    }
+
+    /**
+     *
+     * @param proxy         为由Javassist动态生成的代理类实例
+     * @param method        当前要调用的方法
+     * @param proxyMethod   为生成的代理类对方法的代理引用
+     * @param args          参数值列表
+     * @return              从代理实例的方法调用返回的值
+     * @throws Throwable
+     */
     @Override
-    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+    public Object invoke(Object proxy, Method method, Method proxyMethod, Object[] args) throws Throwable {
         DocMethod docMethod = docMethodMap.get(method);
         if(docMethod == null){
             docMethod = new DocMethod();
@@ -56,16 +77,4 @@ public class ProxyMethod implements MethodInterceptor {
         docMethodMap.put(method,docMethod);
         return result;
     }
-
-    //创建一个方法来完成创建代理对象
-    static Object createInstance(Object targetObject,String useClassName){
-        ProxyMethod proxyMethod = new ProxyMethod();
-        proxyMethod.path = EtestConfig.docDir + useClassName.replaceAll("\\.","/") + ".md";
-        proxyMethod.targetObject = targetObject;   //  => 设置代理对象
-        Enhancer enhancer=new Enhancer();
-        enhancer.setSuperclass(   targetObject.getClass() );
-        enhancer.setCallback(proxyMethod);
-        return enhancer.create();  //创建代理类对象.
-    }
-
 }

@@ -27,11 +27,11 @@
             <version>${fastjson.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>${cglib.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>cglib</groupId>-->
+            <!--<artifactId>cglib</artifactId>-->
+            <!--<version>${cglib.version}</version>-->
+        <!--</dependency>-->
 
         <!-- https://mvnrepository.com/artifact/javassist/javassist -->
         <dependency>
