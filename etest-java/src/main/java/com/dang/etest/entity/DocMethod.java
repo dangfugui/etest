@@ -15,7 +15,7 @@ public class DocMethod {
     Method method;
     List<Case> caseList = new ArrayList<>();
 
-    class  Case{
+   public static class  Case{
         Object[] args;
         Object result;
 
@@ -27,11 +27,34 @@ public class DocMethod {
             this.args = args;
             this.result = result;
         }
-    }
+
+       public Object[] getArgs() {
+           return args;
+       }
+
+       public Object getResult() {
+           return result;
+       }
+   }
 
     public DocMethod addCase(Object[]args, Object result){
-        caseList.add(new Case());
+        caseList.add(new Case(args, result));
         return this;
     }
 
+    public Method getMethod() {
+        return method;
+    }
+
+    public void setMethod(Method method) {
+        this.method = method;
+    }
+
+    public List<Case> getCaseList() {
+        return caseList;
+    }
+
+    public void setCaseList(List<Case> caseList) {
+        this.caseList = caseList;
+    }
 }

@@ -9,7 +9,7 @@ package com.dang.etest.sample;
 public class UserServiceSuper {
 
     private UserMapper supperMapper = new UserMapper();
-    private String name = "supper";
+    private String name = "super";
 
     public String getName() {
         return name;

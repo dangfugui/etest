@@ -16,4 +16,18 @@ public class UserMapper {
         user.setAge(id);
         return user;
     }
+
+    /**
+     * mapper 通过用户名和id 获取用户
+     * @param id        ID
+     * @param name      用户名
+     * @return          User
+     */
+    public User getByIdAndName(Integer id, String name) {
+        User user = new User();
+        user.setId(id);
+        user.setUserName(name);
+        user.setAge(id);
+        return user;
+    }
 }

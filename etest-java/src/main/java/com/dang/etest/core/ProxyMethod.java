@@ -32,7 +32,7 @@ public class ProxyMethod implements MethodHandler {
             public void run()
             {
                 try {
-                    DocUtil.createDoc(path,docMethodMap);
+                    DocUtil.createDoc(path,docMethodMap,targetObject);
                     LOG.info("ShutdownHook");
                 } catch (IOException e) {
                     LOG.error("create doc error",e);
@@ -71,6 +71,7 @@ public class ProxyMethod implements MethodHandler {
         DocMethod docMethod = docMethodMap.get(method);
         if(docMethod == null){
             docMethod = new DocMethod();
+            docMethod.setMethod(method);
         }
         Object result = method.invoke(targetObject, args);
         docMethod.addCase(args,result);

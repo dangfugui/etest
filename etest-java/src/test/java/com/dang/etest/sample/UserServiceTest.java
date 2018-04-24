@@ -26,7 +26,17 @@ public class UserServiceTest {
     public void getBeanName() throws Exception {
         User user = userService.getById(3);
         Assert.assertEquals("userName:"+3, user.getUserName());
-        Assert.assertEquals("supper", userService.getName());
+    }
+    @org.junit.Test
+    public void getSuperName() throws Exception {
+        Assert.assertEquals("super", userService.getName());
+    }
+
+
+    @org.junit.Test
+    public void getByIdAndName() throws Exception {
+        User user = userService.getByIdAndName(3,"dang");
+        Assert.assertEquals("dang", user.getUserName());
     }
 
 }
