@@ -35,7 +35,13 @@ public class Classes {
         } catch (NotFoundException e) {
             throw e;
         }
+        // 如果是静态方法，则第一就是参数
+        // 如果不是静态方法，则第一个是"this"，然后才是方法的参数
         int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
+        // 不知道为什么会出现第一个参数是slot this 的情况
+        if ("this".equals(attr.variableName(pos))) {
+            pos += 1;
+        }
         for (int i = 0; i < paramNames.length; i++) {
             paramNames[i] = attr.variableName(i + pos);
         }
