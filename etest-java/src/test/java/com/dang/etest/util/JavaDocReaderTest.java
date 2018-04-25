@@ -1,6 +1,5 @@
 package com.dang.etest.util;
 
-
 import org.junit.Test;
 
 /**
@@ -12,9 +11,9 @@ import org.junit.Test;
 public class JavaDocReaderTest {
     @Test
     public void newInstance() throws Exception {
-        String paht = System. getProperty ("user.dir") + "/src/test/java/com/dang/etest/sample/UserService.java";
+        String paht = System.getProperty("user.dir") + "/src/test/java/com/dang/etest/sample/UserService.java";
         JavaDocReader javaDocReader = JavaDocReader.newInstance(paht);
-//        javaDocReader.show();
+        //        javaDocReader.show();
     }
 
 }

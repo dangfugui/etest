@@ -17,18 +17,20 @@ import com.dang.etest.entity.MethodContext;
 public class MethodContextUtil {
 
     public static MethodContext find(String path, Method method, Object[] args) {
-        File  file= new File(path);
-        if(file == null){
+        File file = new File(path);
+        if (file == null) {
             return null;
         }
         try {
             List<String> list = FileUtil.readAsList(file);
-            for (String line: list){
+            for (String line : list) {
                 MethodContext context = JSON.parseObject(line, MethodContext.class);
-                if(context.getMethod().equals(method.getName()) &&
-                        context.getClassName().equals(method.getDeclaringClass().getName())&&
-                        JSON.toJSONString(context.getArgs()).equals(JSON.toJSONString(args))){
-                    return context;
+                if (context.getMethod().equals(method.getName()) &&
+                        context.getClassName().equals(method.getDeclaringClass().getName())) {
+                    if((context.getArgsMD5()!=null && context.getArgsMD5().equals(MethodContext.argsMd5(args)))||
+                            (context.getArgsMD5() == null && MethodContext.argsMd5(args) == null)){
+                        return context;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -42,6 +44,6 @@ public class MethodContextUtil {
         if (file == null) {
             FileUtil.createFile(file);
         }
-        FileUtil.write(file, true,  JSON.toJSONString(context));
+        FileUtil.write(file, true, JSON.toJSONString(context));
     }
 }

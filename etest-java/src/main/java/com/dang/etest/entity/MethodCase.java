@@ -5,39 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Description: 测试方法的文档
+ * Description: 测试方法的 测试用例
  *
  * @Author dangqihe
  * @Date Create in 2018/4/23
  */
-public class DocMethod {
+public class MethodCase {
 
     Method method;
     List<Case> caseList = new ArrayList<>();
 
-   public static class  Case{
-        Object[] args;
-        Object result;
-
-        Case(){
-
-        }
-
-        Case(Object[]args, Object result ){
-            this.args = args;
-            this.result = result;
-        }
-
-       public Object[] getArgs() {
-           return args;
-       }
-
-       public Object getResult() {
-           return result;
-       }
-   }
-
-    public DocMethod addCase(Object[]args, Object result){
+    public MethodCase addCase(Object[] args, Object result) {
         caseList.add(new Case(args, result));
         return this;
     }
@@ -56,5 +34,27 @@ public class DocMethod {
 
     public void setCaseList(List<Case> caseList) {
         this.caseList = caseList;
+    }
+
+    public static class Case {
+        Object[] args;
+        Object result;
+
+        Case() {
+
+        }
+
+        Case(Object[] args, Object result) {
+            this.args = args;
+            this.result = result;
+        }
+
+        public Object[] getArgs() {
+            return args;
+        }
+
+        public Object getResult() {
+            return result;
+        }
     }
 }

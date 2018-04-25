@@ -43,7 +43,7 @@ public class JavassistProxyFactory02 {
                 System.out.println("--------------------------------");
                 System.out.println(self.getClass());
                 //class com.javassist.demo.A_$$_javassist_0
-                System.out.println("代理类对方法的代理引用:"+thismethod.getName());
+                System.out.println("代理类对方法的代理引用:" + thismethod.getName());
                 System.out.println("开启事务 -------");
 
                 Object result = proceed.invoke(self, args);
@@ -53,11 +53,8 @@ public class JavassistProxyFactory02 {
             }
         });
 
-
-
-
         // 通过字节码技术动态创建子类实例
-        return  proxyFactory.createClass().newInstance();
+        return proxyFactory.createClass().newInstance();
     }
 
 }

@@ -19,7 +19,6 @@ import javassist.bytecode.MethodInfo;
  */
 public class Classes {
 
-
     protected static String[] getMethodParamNames(CtMethod cm) throws Exception {
         CtClass cc = cm.getDeclaringClass();
         MethodInfo methodInfo = cm.getMethodInfo();
@@ -49,6 +48,7 @@ public class Classes {
      * @param clazz
      * @param method
      * @param paramTypes
+     *
      * @return
      */
     public static String[] getMethodParamNames(Class<?> clazz, String method,
@@ -61,8 +61,9 @@ public class Classes {
             cc = pool.get(clazz.getName());
 
             String[] paramTypeNames = new String[paramTypes.length];
-            for (int i = 0; i < paramTypes.length; i++)
+            for (int i = 0; i < paramTypes.length; i++) {
                 paramTypeNames[i] = paramTypes[i].getName();
+            }
 
             cm = cc.getDeclaredMethod(method, pool.get(paramTypeNames));
         } catch (NotFoundException e) {
@@ -76,10 +77,11 @@ public class Classes {
      *
      * @param clazz
      * @param method
+     *
      * @return
-     * @throws NotFoundException
-     *             如果类或者方法不存在
-     *             如果最终编译的class文件不包含局部变量表信息
+     *
+     * @throws NotFoundException 如果类或者方法不存在
+     *                           如果最终编译的class文件不包含局部变量表信息
      */
     public static String[] getMethodParamNames(Class<?> clazz, Method method) throws Exception {
 

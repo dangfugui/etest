@@ -2,6 +2,7 @@ package com.dang.etest.sample;
 
 /**
  * Description: 用户 对象
+ *
  * @Date Create in 2018/4/22
  */
 public class User {

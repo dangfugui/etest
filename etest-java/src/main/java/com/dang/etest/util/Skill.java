@@ -110,4 +110,18 @@ public class Skill {
             return null;
         }
     }
+
+    public static <T> T tryGet(Supplier<T> supplier, T defaultValue) {
+        try {
+            T data = supplier.get();
+            if (data == null) {
+                return null;
+            } else {
+                return data;
+            }
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            return defaultValue;
+        }
+    }
+
 }
