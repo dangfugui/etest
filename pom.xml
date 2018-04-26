@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.dang.etest</groupId>
+    <artifactId>etest</artifactId>
+    <packaging>pom</packaging>
+    <version>${etest.version}</version>
+
+    <modules>
+        <module>etest-core</module>
+        <module>core-sample</module>
+    </modules>
+
+
+    <properties>
+        <etest.version>1.0-SNAPSHOT</etest.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <cglib.version>3.2.6</cglib.version>
+        <fastjson.version>1.2.44</fastjson.version>
+        <logback.version>1.2.3</logback.version>
+        <junit.version>4.11</junit.version>
+        <javassist.version>3.12.1.GA</javassist.version>
+
+    </properties>
+
+</project>
