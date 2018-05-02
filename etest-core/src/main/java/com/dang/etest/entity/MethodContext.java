@@ -38,7 +38,7 @@ public class MethodContext {
         }
         StringBuffer sb = new StringBuffer();
         for (Object o : args) {
-            sb.append(JSON.toJSONString(0));
+            sb.append(JSON.toJSONString(0)).append(",");
         }
         return DigestUtil.toMD5(sb.toString());
     }
