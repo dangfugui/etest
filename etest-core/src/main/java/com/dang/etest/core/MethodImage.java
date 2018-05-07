@@ -14,7 +14,6 @@ import com.alibaba.fastjson.JSON;
 import com.dang.etest.entity.MethodContext;
 import com.dang.etest.util.FileUtil;
 import com.dang.etest.util.Skill;
-import com.sun.tools.javac.util.StringUtils;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
@@ -31,11 +30,10 @@ public class MethodImage implements MethodHandler {
     private static final Logger LOG = LoggerFactory.getLogger(MethodImage.class);
 
     private Object targetObject;
-    private Map<String,MethodContext> methodContextMap;
+    private Map<String, MethodContext> methodContextMap;
     private String useClassName;            //  镜像文件路径
 
-
-    private MethodImage(Object targetObject, String useClassName){
+    private MethodImage(Object targetObject, String useClassName) {
         this.targetObject = targetObject;        // 设置代理对象
         this.useClassName = useClassName;
         methodContextMap = readMethodContextMap();
@@ -45,17 +43,20 @@ public class MethodImage implements MethodHandler {
                 saveMethodContextMap();
             }
         }));
+
     }
 
     /**
      * 创建一个方法来完成创建代理对象
-     * @param targetObject  被代理对象
-     * @param useClassName  使用类名
+     *
+     * @param targetObject 被代理对象
+     * @param useClassName 使用类名
+     *
      * @return 代理对象
      */
     static Object createInstance(Object targetObject, String useClassName)
             throws IllegalAccessException, InstantiationException {
-        MethodImage methodImage = new MethodImage(targetObject,useClassName);
+        MethodImage methodImage = new MethodImage(targetObject, useClassName);
         // 代理工厂
         ProxyFactory proxyFactory = new ProxyFactory();
         // 设置需要创建子类的父类
@@ -76,7 +77,7 @@ public class MethodImage implements MethodHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Method proxyMethod, Object[] args) throws Throwable {
-        String key = buildKey(method.getDeclaringClass().getName(),method.getName(),args);
+        String key = buildKey(method.getDeclaringClass().getName(), method.getName(), args);
         MethodContext context = methodContextMap.get(key);
 
         if (context != null) {    // 如果存在之前存储的执行结果 就重现结果
@@ -94,25 +95,27 @@ public class MethodImage implements MethodHandler {
         } catch (Throwable throwable) {
             context.setThrowable(throwable);
             throw throwable;
-        }finally {
+        } finally {
             // 保存方法执行上下文
-            methodContextMap.put(key,context);
+            methodContextMap.put(key, context);
         }
         return context.getResult();
     }
 
     /**
      * 构建map key
-     * @param className     类名
-     * @param methodName    方法名
-     * @param args          参数
-     * @return              key
+     *
+     * @param className  类名
+     * @param methodName 方法名
+     * @param args       参数
+     *
+     * @return key
      */
-    private String buildKey(String className,String methodName, Object[] args) {
+    private String buildKey(String className, String methodName, Object[] args) {
         StringBuffer key = new StringBuffer();
         key.append(className).append(".");
         key.append(methodName).append("(");
-        if(args != null) {
+        if (args != null) {
             key.append(MethodContext.argsMd5(args)).append(")");
         }
         return key.toString();
@@ -120,20 +123,21 @@ public class MethodImage implements MethodHandler {
 
     /**
      * 读取方法镜像map
-     * @return   方法镜像map
+     *
+     * @return 方法镜像map
      */
-    private Map<String,MethodContext> readMethodContextMap() {
+    private Map<String, MethodContext> readMethodContextMap() {
         String path = EtestConfig.userDir + EtestConfig.imageDir +
-                useClassName.replaceAll("\\.", "/") + ".image";
+                useClassName.replaceAll("\\.", "/") +"."+ targetObject.getClass().getSimpleName() + ".image";
         Map<String, MethodContext> res = new HashMap<>();
         File file = new File(path);
-        if (file == null||!file.exists()) {
+        if (file == null || !file.exists()) {
             return res;
         }
         try {
             List<String> list = FileUtil.readAsList(file);
             for (String line : list) {
-                if(Skill.isEmpty(line)){
+                if (Skill.isEmpty(line)) {
                     continue;
                 }
                 MethodContext context = JSON.parseObject(line, MethodContext.class);
@@ -148,20 +152,23 @@ public class MethodImage implements MethodHandler {
     /**
      * 保存方法镜像map
      */
-    private void saveMethodContextMap(){
+    private void saveMethodContextMap() {
+        if(!EtestConfig.changeImage) {   // 是否要更改镜像文件
+            return;
+        }
         String path = EtestConfig.userDir + EtestConfig.imageDir +
-                useClassName.replaceAll("\\.", "/") + ".image";
+                useClassName.replaceAll("\\.", "/") +"."+ targetObject.getClass().getSimpleName() + ".image";
         File file = new File(path);
-        if (file == null) {
+        if (file != null && !file.exists()) {
             try {
                 file = FileUtil.createFile(file);
             } catch (IOException e) {
-                LOG.error("create File error",e);
+                LOG.error("create File error", e);
                 return;
             }
         }
         StringBuffer buffer = new StringBuffer();
-        for(Map.Entry<String,MethodContext> entry :methodContextMap.entrySet()){
+        for (Map.Entry<String, MethodContext> entry : methodContextMap.entrySet()) {
             buffer.append(JSON.toJSONString(entry.getValue())).append("\n");
         }
         try {

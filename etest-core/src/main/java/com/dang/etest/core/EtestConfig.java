@@ -16,6 +16,9 @@ public class EtestConfig {
     public static String docDir = "/src/test/java/";
     public static String srcDir = "/src/main/java/";
 
-    static MethodCaseReader methodCaseReader = new MarkdownCreater();   // 默认生成markdown文档
+    public static boolean changeImage = true;
+
+
+    public static MethodCaseReader methodCaseReader = new MarkdownCreater();   // 默认生成markdown文档  如果为空不生成文档
 
 }
