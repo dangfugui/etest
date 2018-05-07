@@ -5,8 +5,10 @@ import java.lang.reflect.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dang.etest.util.MethodContextUtil;
+
 /**
- * Description:
+ * Description: etest  代理工厂
  *
  * @Author dangqihe
  * @Date Create in 2018/4/22
@@ -30,7 +32,8 @@ public class EtestFactory {
                     if (field.getType().equals(String.class)) {
                         continue;
                     }
-                    Object proxy = MethodImage.createInstance(fieldValue, useClassName);
+                    Object proxy = MethodImage.createInstance(fieldValue, useClassName,
+                            MethodContextUtil.readMethodContextMap(useClassName, obj));
                     field.set(obj, proxy);      // 获得该属性为代理对象
                     LOG.info("mock:" + field.getType());
                 } catch (Throwable e) {
