@@ -42,7 +42,7 @@ public class ProxyMethod implements MethodHandler {
         }));
     }
 
-    //创建一个方法来完成创建代理对象
+    // 创建一个方法来完成创建代理对象
     static Object createInstance(Object targetObject, String useClassName)
             throws IllegalAccessException, InstantiationException {
         ProxyMethod proxyMethod = new ProxyMethod();
@@ -53,7 +53,7 @@ public class ProxyMethod implements MethodHandler {
         // 设置需要创建子类的父类
         proxyFactory.setSuperclass(targetObject.getClass());
         proxyFactory.setHandler(proxyMethod);
-        return proxyFactory.createClass().newInstance();  //创建代理类对象.
+        return proxyFactory.createClass().newInstance();  // 创建代理类对象.
     }
 
     /**

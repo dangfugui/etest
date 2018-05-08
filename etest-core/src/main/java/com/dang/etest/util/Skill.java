@@ -33,6 +33,10 @@ public class Skill {
         }
     }
 
+    public static boolean notEmpty(Supplier supplier) {
+        return !isEmpty(supplier);
+    }
+
     /**
      * 判断对象是否为空
      *
@@ -47,9 +51,6 @@ public class Skill {
         return isEmpty(supplier.get());
     }
 
-    public static boolean notEmpty(Supplier supplier) {
-        return !isEmpty(supplier);
-    }
 
     /**
      * 判断数据是否为空
@@ -68,7 +69,7 @@ public class Skill {
                 return true;
             }
             return false;
-        } else if (data instanceof Collection) {    //List  set
+        } else if (data instanceof Collection) {    // List  set
             Collection coll = (Collection) data;
             if (coll.size() == 0) {
                 return true;

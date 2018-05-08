@@ -50,7 +50,7 @@ public class MethodImage implements MethodHandler {
         // 设置需要创建子类的父类
         proxyFactory.setSuperclass(targetObject.getClass());
         proxyFactory.setHandler(methodImage);
-        return proxyFactory.createClass().newInstance();  //创建代理类对象.
+        return proxyFactory.createClass().newInstance();  // 创建代理类对象.
     }
 
     /**

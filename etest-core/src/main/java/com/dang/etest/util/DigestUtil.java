@@ -17,16 +17,17 @@ public class DigestUtil {
      */
     private final static String KEY_SHA = "SHA";
     // SHA-1，SHA-224，SHA-256，SHA-384，和SHA-512
-    private final static String KEY_MD5 = "MD5";
-    private final static String KEY_SHA1 = "SHA-1";
-    private final static String KEY_SHA224 = "SHA-224";
-    private final static String KEY_SHA256 = "SHA-256";
-    private final static String KEY_SHA384 = "SHA-384";
-    private final static String KEY_SHA512 = "SHA-512";
+    private static final String KEY_MD5 = "MD5";
+    private static final String KEY_SHA1 = "SHA-1";
+    private static final String KEY_SHA224 = "SHA-224";
+    private static final String KEY_SHA256 = "SHA-256";
+    private static final String KEY_SHA384 = "SHA-384";
+    private static final String KEY_SHA512 = "SHA-512";
+
     /**
      * 全局数组
      */
-    private final static String[] HEX_DIGITS = {"0", "1", "2", "3", "4", "5",
+    private static final String[] HEX_DIGITS = {"0", "1", "2", "3", "4", "5",
             "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
 
     /**

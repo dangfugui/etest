@@ -58,6 +58,9 @@ public class MethodContextUtil {
                     continue;
                 }
                 MethodContext context = JSON.parseObject(line, MethodContext.class);
+                if (context.getKey() == null) {
+                    context.setKey(buildKey(context.getClassName(), context.getMethod(), context.getArgs()));
+                }
                 res.put(context.getKey(), context);
             }
         } catch (IOException e) {
