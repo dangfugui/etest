@@ -58,7 +58,7 @@ public class MethodContextUtil {
                     continue;
                 }
                 MethodContext context = JSON.parseObject(line, MethodContext.class);
-                res.put(buildKey(context.getClassName(), context.getMethod(), context.getArgs()), context);
+                res.put(context.getKey(), context);
             }
         } catch (IOException e) {
             LOG.error("file read error", e);

@@ -13,6 +13,7 @@ import com.dang.etest.util.DigestUtil;
  */
 public class MethodContext {
 
+    private String key;
     private String className;
     private String method;
     private Object[] args;
@@ -25,7 +26,8 @@ public class MethodContext {
 
     }
 
-    public MethodContext(Method method, Object[] args) {
+    public MethodContext(String key, Method method, Object[] args) {
+        this.key = key;
         this.method = method.getName();
         this.className = method.getDeclaringClass().getName();
         this.args = args;
@@ -41,6 +43,14 @@ public class MethodContext {
             sb.append(JSON.toJSONString(o)).append(",");
         }
         return DigestUtil.toMD5(sb.toString());
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getClassName() {

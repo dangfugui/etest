@@ -78,7 +78,7 @@ public class MethodImage implements MethodHandler {
             return JSON.parseObject(JSON.toJSONString(context.getResult()), context.getResultClass());
         }
         // 创建一个新的方法执行上下文
-        context = new MethodContext(method, args);
+        context = new MethodContext(key, method, args);
         try {
             Object result = method.invoke(targetObject, args);
             if (result != null) {
