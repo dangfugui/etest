@@ -3,6 +3,7 @@ package com.dang.etest.util;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,7 @@ public class MethodContextUtil {
                 useClassName.replaceAll("\\.", "/") + "." + targetObject.getClass().getSimpleName() + ".image";
         Map<String, MethodContext> res = allContent.get(path);
         if (res == null) {
-            res = new HashMap<>();
+            res = new LinkedHashMap<>();
             allContent.put(path, res);
         }
         File file = new File(path);
