@@ -2,7 +2,6 @@ package com.dang.etest.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,15 @@ public class MethodContextUtil {
 
     private static Logger LOG = LoggerFactory.getLogger(MethodContextUtil.class);
     private static Map<String, Map<String, MethodContext>> allContent = new HashMap<>();
+
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                saveMethodContextMap();
+            }
+        }));
+    }
 
     /**
      * 读取方法镜像map
@@ -55,15 +63,6 @@ public class MethodContextUtil {
             LOG.error("file read error", e);
         }
         return res;
-    }
-
-    static {
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                saveMethodContextMap();
-            }
-        }));
     }
 
     /**

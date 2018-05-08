@@ -94,7 +94,8 @@ public class MarkdownCreater implements MethodCaseReader {
     @Override
     public void doReader(String useClassName, Map<Method, MethodCase> docMethodMap, Object targetObject)
             throws Exception {
-        String path = EtestConfig.userDir + EtestConfig.docDir + useClassName.replaceAll("\\.", "/") + ".md";
+        String path = EtestConfig.userDir + EtestConfig.docDir + useClassName.replaceAll("\\.", "/")
+                + "." + targetObject.getClass().getSimpleName() + ".md";
         File file = new File(path);
         if (!file.exists()) {
             FileUtil.createFile(path);
