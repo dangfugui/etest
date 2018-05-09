@@ -1,5 +1,8 @@
 package com.dang.etest.sample.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dang.etest.sample.entity.User;
 
 /**
@@ -33,5 +36,13 @@ public class UserMapper {
         user.setUserName(name);
         user.setAge(id);
         return user;
+    }
+
+    public List<User> list() {
+        List<User> list = new ArrayList<User>();
+        for (int i = 0; i < 5; i++) {
+            list.add(getUserById(i));
+        }
+        return list;
     }
 }

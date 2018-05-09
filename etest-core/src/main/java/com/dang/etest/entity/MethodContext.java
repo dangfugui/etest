@@ -1,8 +1,14 @@
 package com.dang.etest.entity;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.dang.etest.util.DigestUtil;
 
 /**
@@ -21,6 +27,7 @@ public class MethodContext {
     private Object result;
     private Class resultClass;
     private Throwable throwable;
+    private Object T;
 
     public MethodContext() {
 
@@ -81,10 +88,6 @@ public class MethodContext {
         return result;
     }
 
-    public void setResult(Object result) {
-        this.result = result;
-    }
-
     public Throwable getThrowable() {
         return throwable;
     }
@@ -107,5 +110,39 @@ public class MethodContext {
 
     public void setArgsMD5(String argsMD5) {
         this.argsMD5 = argsMD5;
+    }
+
+    public void setResult(Object result) {
+        if (result == null) {
+            return;
+        }
+        if (result instanceof List && ((List) result).size() > 0) {
+            this.resultClass = ((List) result).get(0).getClass();
+        } else {
+            this.resultClass = result.getClass();
+        }
+        this.result = result;
+    }
+
+    public Object doReturn(Method method) {
+        if (result == null) {
+            return null;
+        }
+        if (result instanceof JSONArray) {
+            JSONArray jsonArray = (JSONArray) result;
+            if (method.getReturnType() == List.class) {
+                //                Type[] types = ((ParameterizedType) method.getGenericReturnType())
+                // .getActualTypeArguments();
+                ArrayList<Object> res = new ArrayList<>();
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    res.add(jsonArray.getJSONObject(i).toJavaObject(resultClass));
+                }
+                return res;
+            }
+        } else if (result instanceof JSONObject) {
+            JSONObject jsonObject = (JSONObject) result;
+            return jsonObject.toJavaObject(resultClass);
+        }
+        return result;
     }
 }

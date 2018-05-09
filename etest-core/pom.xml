@@ -44,6 +44,12 @@
             <version>${javassist.version}</version>
         </dependency>
 
+        <!--<dependency>-->
+        <!--<groupId>cglib</groupId>-->
+        <!--<artifactId>cglib</artifactId>-->
+        <!--<version>${cglib.version}</version>-->
+        <!--</dependency>-->
+
 
         <!-- log -->
         <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->

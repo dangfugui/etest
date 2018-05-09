@@ -1,6 +1,9 @@
 package com.dang.etest.sample.service;
 
+import java.util.List;
+
 import com.dang.etest.sample.entity.User;
+import com.dang.etest.sample.mapper.FinalMapper;
 import com.dang.etest.sample.mapper.UserMapper;
 
 /**
@@ -13,7 +16,7 @@ public class UserService extends UserServiceSuper {
 
     private UserMapper userMapper = new UserMapper();
     private String beanName = "";
-
+    private FinalMapper finalMapper = new FinalMapper();
     /**
      * 通过ID获取用户信息
      *
@@ -49,11 +52,25 @@ public class UserService extends UserServiceSuper {
         return userMapper.getByIdAndName(id, name);
     }
 
+    /**
+     * 测试 final 类 和方法
+     *
+     * @return
+     */
+    public String doFinal() {
+        return finalMapper.finalMethod();
+    }
+
+
     public String getBeanName() {
         return beanName;
     }
 
     public void setBeanName(String beanName) {
         this.beanName = beanName;
+    }
+
+    public List<User> list() {
+        return userMapper.list();
     }
 }

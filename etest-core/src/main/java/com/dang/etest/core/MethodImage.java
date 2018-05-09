@@ -1,6 +1,8 @@
 package com.dang.etest.core;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import com.dang.etest.util.MethodContextUtil;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 
+
 /**
  * Description: 代理对象的属性中的方法拦截器
  * 为代理对象中 执行的成员变量的方法创建镜像缓存
@@ -20,7 +23,7 @@ import javassist.util.proxy.ProxyFactory;
  * @Author dangqihe
  * @Date Create in 2018/4/22
  */
-public class MethodImage implements MethodHandler {
+public class MethodImage implements MethodHandler, InvocationHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodImage.class);
 
@@ -42,29 +45,48 @@ public class MethodImage implements MethodHandler {
      *
      * @return 代理对象
      */
-    static Object createInstance(Object targetObject, String useClassName, Map<String, MethodContext> methodContextMap)
-            throws IllegalAccessException, InstantiationException {
+    static Object createInstance(Object targetObject, String useClassName,
+                                 Map<String, MethodContext> methodContextMap) {
         MethodImage methodImage = new MethodImage(targetObject, useClassName, methodContextMap);
-        // 代理工厂
-        ProxyFactory proxyFactory = new ProxyFactory();
-        // 设置需要创建子类的父类
-        proxyFactory.setSuperclass(targetObject.getClass());
-        proxyFactory.setHandler(methodImage);
-        return proxyFactory.createClass().newInstance();  // 创建代理类对象.
+        try {
+            // 代理工厂
+            ProxyFactory proxyFactory = new ProxyFactory();
+            // 设置需要创建子类的父类
+            proxyFactory.setSuperclass(targetObject.getClass());
+            proxyFactory.setHandler(methodImage);
+            return proxyFactory.createClass().newInstance();  // 创建代理类对象.
+        } catch (Exception e) {   // javassist 代理失败的话使用cglib 代理
+            //            Enhancer enhancer=new Enhancer();
+            //            enhancer.setSuperclass(targetObject.getClass() );
+            //            // enhancer.setClassLoader(   targetObject.getClass().getClassLoader()  );
+            //            enhancer.setCallback(methodImage);
+            //            return enhancer.create();  //创建代理类对象.
+            return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                    targetObject.getClass().getInterfaces(), methodImage);
+        }
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        return myInvoke(proxy, method, args);
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Method proxyMethod, Object[] args) throws Throwable {
+        return myInvoke(proxy, method, args);
     }
 
     /**
-     * @param proxy       为由Javassist动态生成的代理类实例
-     * @param method      当前要调用的方法
-     * @param proxyMethod 为生成的代理类对方法的代理引用
-     * @param args        参数值列表
+     * @param proxy         代理类实例
+     * @param method        当前要调用的方法
+     * @param args          参数值列表
      *
      * @return 从代理实例的方法调用返回的值
      *
      * @throws Throwable
      */
-    @Override
-    public Object invoke(Object proxy, Method method, Method proxyMethod, Object[] args) throws Throwable {
+
+    private Object myInvoke(Object proxy, Method method, Object[] args) throws Throwable {
         String key = MethodContextUtil.buildKey(method.getDeclaringClass().getName(), method.getName(), args);
         MethodContext context = methodContextMap.get(key);
 
@@ -72,10 +94,7 @@ public class MethodImage implements MethodHandler {
             if (context.getThrowable() != null) {
                 throw context.getThrowable();
             }
-            if (context.getResult() == null) {
-                return null;
-            }
-            return JSON.parseObject(JSON.toJSONString(context.getResult()), context.getResultClass());
+            return context.doReturn(method);
         }
         // 创建一个新的方法执行上下文
         context = new MethodContext(key, method, args);
@@ -83,7 +102,6 @@ public class MethodImage implements MethodHandler {
             Object result = method.invoke(targetObject, args);
             if (result != null) {
                 context.setResult(result);
-                context.setResultClass(result.getClass());
             }
         } catch (Throwable throwable) {
             context.setThrowable(throwable);
@@ -94,4 +112,5 @@ public class MethodImage implements MethodHandler {
         }
         return context.getResult();
     }
+
 }

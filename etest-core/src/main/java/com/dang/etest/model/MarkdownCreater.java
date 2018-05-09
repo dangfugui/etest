@@ -83,7 +83,7 @@ public class MarkdownCreater implements MethodCaseReader {
                                 paramTag == null ? "" : paramTag.parameterComment())).append(ENTER);
                     }
                 } catch (Exception e) {
-                    LOG.error("MethodParamNames error", e);
+                    LOG.error("MethodParamNames error:" + methodCase.getMethod().getName(), e);
                 }
             }
             sb.append("```json").append(ENTER);

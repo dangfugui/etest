@@ -1,5 +1,7 @@
 package com.dang.etest.sample.service;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 
@@ -20,11 +22,12 @@ public class UserServiceTest {
     @BeforeClass
     public static void Before() throws IllegalAccessException {
         EtestConfig.userDir = System.getProperty("user.dir") + "/core-sample";     // 测试对象的原文件在test文件夹中
+        EtestConfig.changeImage = true;
         userService = EtestFactory.proxy(userService);
     }
 
     @org.junit.Test
-    public void getBeanName() throws Exception {
+    public void getById() throws Exception {
         User user = userService.getById(3);
         Assert.assertEquals("userName:" + 3, user.getUserName());
     }
@@ -43,6 +46,20 @@ public class UserServiceTest {
     @org.junit.Test
     public void testToString() throws Exception {
         userService.toString();
+    }
+
+    @org.junit.Test
+    public void doFinal() {
+        String res = userService.doFinal();
+        Assert.assertEquals("finalMethod", res);
+    }
+
+    @org.junit.Test
+    public void list() {
+        List<User> res = userService.list();
+        for (int i = 0; i < res.size(); i++) {
+            res.get(i).getUserName().equals("userName:" + i);
+        }
     }
 
 }
