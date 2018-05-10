@@ -107,4 +107,12 @@ public class Classes {
         }
         return getMethodParamNames(cm);
     }
+
+    public static Class<?> getRealClass(final Class<?> cla) {
+        Class<?> clazz = cla;
+        while (clazz.getName().contains("$")) {
+            clazz = clazz.getSuperclass();
+        }
+        return clazz;
+    }
 }

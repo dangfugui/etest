@@ -20,9 +20,9 @@ import com.dang.etest.entity.MethodContext;
  * @Author dangqihe dangqihe
  * @Date Create in 2018/4/22
  */
-public class MethodContextUtil {
+public class MethodContexts {
 
-    private static Logger LOG = LoggerFactory.getLogger(MethodContextUtil.class);
+    private static Logger LOG = LoggerFactory.getLogger(MethodContexts.class);
     private static Map<String, Map<String, MethodContext>> allContent = new HashMap<>();
 
     static {
@@ -40,8 +40,10 @@ public class MethodContextUtil {
      * @return 方法镜像map
      */
     public static Map<String, MethodContext> readMethodContextMap(String useClassName, Object targetObject) {
+
         String path = EtestConfig.userDir + EtestConfig.imageDir +
-                useClassName.replaceAll("\\.", "/") + "." + targetObject.getClass().getSimpleName() + ".image";
+                useClassName.replaceAll("\\.", "/") + "." + Classes.getRealClass(targetObject.getClass())
+                .getSimpleName() + ".image";
         Map<String, MethodContext> res = allContent.get(path);
         if (res == null) {
             res = new LinkedHashMap<>();
@@ -116,10 +118,4 @@ public class MethodContextUtil {
         }
         return key.toString();
     }
-
-    //    public static MethodContext findMethodContext(String useClassName, Object targetObject) {
-    //    }
-    //
-    //    public static void saveMethodContext(String useClassName, Object targetObject, MethodContext context) {
-    //    }
 }

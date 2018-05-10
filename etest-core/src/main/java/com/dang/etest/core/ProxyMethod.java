@@ -23,29 +23,16 @@ public class ProxyMethod implements MethodHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ProxyMethod.class);
     private Object targetObject;
     private String useClassName;            //   文档文件路径
-    private Map<Method, MethodCase> docMethodMap = new HashMap<>();
+    private Map<Method, MethodCase> readerMethodMap;
 
     private ProxyMethod() {
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (EtestConfig.methodCaseReader == null) {
-                    return;
-                }
-                try {
-                    EtestConfig.methodCaseReader.doReader(useClassName, docMethodMap, targetObject);
-                    LOG.info("ShutdownHook");
-                } catch (Exception e) {
-                    LOG.error("create doc error", e);
-                }
-            }
-        }));
     }
 
     // 创建一个方法来完成创建代理对象
-    static Object createInstance(Object targetObject, String useClassName)
+    static Object createInstance(Object targetObject, String useClassName, Map<Method, MethodCase> readerMethodMap)
             throws IllegalAccessException, InstantiationException {
         ProxyMethod proxyMethod = new ProxyMethod();
+        proxyMethod.readerMethodMap = readerMethodMap;
         proxyMethod.useClassName = useClassName;
         proxyMethod.targetObject = targetObject;   //  => 设置代理对象
         // 代理工厂
@@ -68,14 +55,14 @@ public class ProxyMethod implements MethodHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Method proxyMethod, Object[] args) throws Throwable {
-        MethodCase docMethod = docMethodMap.get(method);
+        MethodCase docMethod = readerMethodMap.get(method);
         if (docMethod == null) {
             docMethod = new MethodCase();
             docMethod.setMethod(method);
         }
         Object result = method.invoke(targetObject, args);
         docMethod.addCase(args, result);
-        docMethodMap.put(method, docMethod);
+        readerMethodMap.put(method, docMethod);
         return result;
     }
 }

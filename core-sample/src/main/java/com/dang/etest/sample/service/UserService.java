@@ -16,7 +16,7 @@ public class UserService extends UserServiceSuper {
 
     private UserMapper userMapper = new UserMapper();
     private String beanName = "";
-    private FinalMapper finalMapper = new FinalMapper();
+    //    private FinalMapper finalMapper = new FinalMapper();
     /**
      * 通过ID获取用户信息
      *
@@ -51,16 +51,6 @@ public class UserService extends UserServiceSuper {
     public User getByIdAndName(int id, String name) {
         return userMapper.getByIdAndName(id, name);
     }
-
-    /**
-     * 测试 final 类 和方法
-     *
-     * @return
-     */
-    public String doFinal() {
-        return finalMapper.finalMethod();
-    }
-
 
     public String getBeanName() {
         return beanName;

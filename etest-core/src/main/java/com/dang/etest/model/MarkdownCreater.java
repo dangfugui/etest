@@ -77,8 +77,14 @@ public class MarkdownCreater implements MethodCaseReader {
                     Parameter[] parameters = methodCase.getMethod().getParameters();
                     for (int i = 0; i < parameters.length; i++) {
                         ParamTag paramTag = JavaDocReader.getParamTag(methodDoc, argsNames[i]);
+                        String sample = "";
+                        try {
+                            sample = JSON.toJSONString(c.getArgs()[i]);
+                        } catch (Throwable t) {
+                            sample = "";
+                        }
                         sb.append(String.format("| %s | %s | %s | %s |", argsNames[i],
-                                JSON.toJSONString(c.getArgs()[i]),
+                                sample,
                                 parameters[i].getType().getSimpleName(),
                                 paramTag == null ? "" : paramTag.parameterComment())).append(ENTER);
                     }
@@ -95,7 +101,7 @@ public class MarkdownCreater implements MethodCaseReader {
     public void doReader(String useClassName, Map<Method, MethodCase> docMethodMap, Object targetObject)
             throws Exception {
         String path = EtestConfig.userDir + EtestConfig.docDir + useClassName.replaceAll("\\.", "/")
-                + "." + targetObject.getClass().getSimpleName() + ".md";
+                + "." + Classes.getRealClass(targetObject.getClass()).getSimpleName() + ".md";
         File file = new File(path);
         if (!file.exists()) {
             FileUtil.createFile(path);
@@ -118,7 +124,7 @@ public class MarkdownCreater implements MethodCaseReader {
             writerMethod(sb, method, methodDoc);
             writerExamples(sb, entry.getValue(), methodDoc);
         }
-        FileUtil.write(file, false, sb.toString());
+        FileUtil.write(file, false, "UTF-8", sb.toString());
     }
 }
 

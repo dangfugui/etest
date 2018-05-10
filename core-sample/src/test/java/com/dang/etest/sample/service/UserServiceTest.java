@@ -3,7 +3,7 @@ package com.dang.etest.sample.service;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 
 import com.dang.etest.core.EtestConfig;
 import com.dang.etest.core.EtestFactory;
@@ -19,11 +19,11 @@ public class UserServiceTest {
 
     private static UserService userService = new UserService();
 
-    @BeforeClass
-    public static void Before() throws IllegalAccessException {
+    @Before
+    public void Before() throws IllegalAccessException {
         EtestConfig.userDir = System.getProperty("user.dir") + "/core-sample";     // 测试对象的原文件在test文件夹中
         EtestConfig.changeImage = true;
-        userService = EtestFactory.proxy(userService);
+        userService = EtestFactory.proxy(new UserService());
     }
 
     @org.junit.Test
@@ -49,11 +49,6 @@ public class UserServiceTest {
         userService.toString();
     }
 
-    @org.junit.Test
-    public void doFinal() {
-        String res = userService.doFinal();
-        Assert.assertEquals("finalMethod", res);
-    }
 
     @org.junit.Test
     public void list() {

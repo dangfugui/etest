@@ -8,9 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
 import com.dang.etest.entity.MethodContext;
-import com.dang.etest.util.MethodContextUtil;
+import com.dang.etest.util.MethodContexts;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
@@ -87,7 +86,7 @@ public class MethodImage implements MethodHandler, InvocationHandler {
      */
 
     private Object myInvoke(Object proxy, Method method, Object[] args) throws Throwable {
-        String key = MethodContextUtil.buildKey(method.getDeclaringClass().getName(), method.getName(), args);
+        String key = MethodContexts.buildKey(method.getDeclaringClass().getName(), method.getName(), args);
         MethodContext context = methodContextMap.get(key);
 
         if (context != null) {    // 如果存在之前存储的执行结果 就重现结果
