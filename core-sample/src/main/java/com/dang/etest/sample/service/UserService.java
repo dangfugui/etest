@@ -36,7 +36,7 @@ public class UserService extends UserServiceSuper {
      *
      * @return userBean
      */
-    public User getById(Integer id, User user) {
+    public User getById(int id, User user) {
         return userMapper.getUserById(id);
     }
 
@@ -48,7 +48,7 @@ public class UserService extends UserServiceSuper {
      *
      * @return UserBean
      */
-    public User getByIdAndName(Integer id, String name) {
+    public User getByIdAndName(int id, String name) {
         return userMapper.getByIdAndName(id, name);
     }
 

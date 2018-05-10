@@ -9,8 +9,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
+import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -18,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileUtil {
+
+    public static final String NEW_LINE = System.getProperty("line.separator");
 
     public static File mkdir(String path) {
         File file = new File(path);
@@ -64,17 +69,22 @@ public class FileUtil {
         return stringBuffe.toString();
     }
 
-    public static List<String> readAsList(String path) throws IOException {
-        return readAsList(new File(path));
+    public static List<String> readAsList(String path, String charst) throws IOException {
+        return readAsList(new File(path), charst);
     }
 
-    public static List<String> readAsList(File file) throws IOException {
+    public static List<String> readAsList(File file, String charst) throws IOException {
         List<String> list = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String line = "";
-        StringBuffer stringBuffe = new StringBuffer();
+        InputStreamReader isr;
+        if (Skill.isEmpty(charst)) {
+            isr = new InputStreamReader(new FileInputStream(file));
+        } else {
+            isr = new InputStreamReader(new FileInputStream(file), charst);
+        }
+        BufferedReader reader = new BufferedReader(isr);
+        String line;
         while ((line = reader.readLine()) != null) {
-            list.add(line.trim());
+            list.add(line);
         }
         return list;
     }
@@ -103,23 +113,21 @@ public class FileUtil {
         return file;
     }
 
-    public static File write(String path, String... lines) throws IOException {
+    public static File write(String path, boolean append, String charset, String... lines) throws IOException {
         File file = new File(path);
         if (!file.exists()) {
             createFile(file);
         }
-        return write(file, false, lines);
+        return write(file, append, charset, lines);
     }
 
-    public static File write(File file, boolean append, String... lines) throws IOException {
-        FileWriter fileWriter = new FileWriter(file, append);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+    public static File write(File file, boolean append, String charset, String... lines) throws IOException {
+        Writer fileWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), charset));
         for (String str : lines) {
-            bufferedWriter.write(str);
-            bufferedWriter.newLine();
+            fileWriter.write(str);
+            fileWriter.write(NEW_LINE);
         }
-        bufferedWriter.flush();
-        bufferedWriter.close();
+        fileWriter.flush();
         fileWriter.close();
         return file;
     }

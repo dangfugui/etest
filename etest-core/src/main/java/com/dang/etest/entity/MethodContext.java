@@ -135,7 +135,7 @@ public class MethodContext {
                 // .getActualTypeArguments();
                 ArrayList<Object> res = new ArrayList<>();
                 for (int i = 0; i < jsonArray.size(); i++) {
-                    res.add(jsonArray.getJSONObject(i).toJavaObject(resultClass));
+                    res.add(jsonArray.getObject(i, this.resultClass));
                 }
                 return res;
             }
@@ -143,6 +143,6 @@ public class MethodContext {
             JSONObject jsonObject = (JSONObject) result;
             return jsonObject.toJavaObject(resultClass);
         }
-        return result;
+        return JSON.parseObject(JSON.toJSONString(result), resultClass);
     }
 }

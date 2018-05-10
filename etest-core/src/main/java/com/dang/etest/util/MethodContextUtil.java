@@ -52,7 +52,7 @@ public class MethodContextUtil {
             return res;
         }
         try {
-            List<String> list = FileUtil.readAsList(file);
+            List<String> list = FileUtil.readAsList(file, "UTF-8");
             for (String line : list) {
                 if (Skill.isEmpty(line)) {
                     continue;
@@ -91,7 +91,7 @@ public class MethodContextUtil {
                 buffer.append(JSON.toJSONString(entry.getValue())).append("\n");
             }
             try {
-                FileUtil.write(file, false, buffer.toString());
+                FileUtil.write(file, false, "UTF-8", buffer.toString());
             } catch (IOException e) {
                 LOG.error("write file error", e);
             }

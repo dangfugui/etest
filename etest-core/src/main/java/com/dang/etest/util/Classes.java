@@ -94,9 +94,14 @@ public class Classes {
         ClassPool pool = ClassPool.getDefault();
         CtClass cc;
         CtMethod cm = null;
+
+        CtClass[] ctArgs = new CtClass[method.getParameters().length];
+        for (int i = 0; i < method.getParameters().length; i++) {
+            ctArgs[i] = pool.get(method.getParameters()[i].getType().getName());
+        }
         try {
             cc = pool.get(clazz.getName());
-            cm = cc.getDeclaredMethod(method.getName());
+            cm = cc.getDeclaredMethod(method.getName(), ctArgs);
         } catch (NotFoundException e) {
             throw e;
         }

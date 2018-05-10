@@ -30,6 +30,7 @@ public class UserServiceTest {
     public void getById() throws Exception {
         User user = userService.getById(3);
         Assert.assertEquals("userName:" + 3, user.getUserName());
+        userService.getById(3, user);
     }
 
     @org.junit.Test
