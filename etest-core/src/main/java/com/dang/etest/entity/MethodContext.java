@@ -127,18 +127,14 @@ public class MethodContext {
     public Object doReturn(Method method) {
         if (result == null) {
             return null;
+        } else if (result.getClass() == method.getReturnType()) {
+            return result;
         }
         if (result instanceof JSONArray) {
-            JSONArray jsonArray = (JSONArray) result;
             if (method.getReturnType() == List.class) {
-                //                Type[] types = ((ParameterizedType) method.getGenericReturnType())
-                // .getActualTypeArguments();
-                ArrayList<Object> res = new ArrayList<>();
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    res.add(jsonArray.getObject(i, this.resultClass));
-                }
-                return res;
+                return JSON.parseArray(JSON.toJSONString(result), resultClass);
             }
+            return result;
         } else if (result instanceof JSONObject) {
             JSONObject jsonObject = (JSONObject) result;
             return jsonObject.toJavaObject(resultClass);
