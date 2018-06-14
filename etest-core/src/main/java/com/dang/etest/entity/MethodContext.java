@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -124,19 +125,21 @@ public class MethodContext {
         this.result = result;
     }
 
-    public Object doReturn(Method method) {
+    public Object doReturn(Class<?> returnType) {
         if (result == null) {
             return null;
-        } else if (result.getClass() == method.getReturnType()) {
+        } else if (result.getClass() == returnType) {
             return result;
         }
-        if (result instanceof JSONArray) {
-            if (method.getReturnType() == List.class) {
+        if (result instanceof JSONArray || result instanceof List) {
+            if (List.class.isAssignableFrom(returnType) && ((List) result).size() > 0) {
                 return JSON.parseArray(JSON.toJSONString(result), resultClass);
             }
-            return result;
         } else if (result instanceof JSONObject) {
             JSONObject jsonObject = (JSONObject) result;
+            if (Map.class.isAssignableFrom(returnType)) {
+                return result;
+            }
             return jsonObject.toJavaObject(resultClass);
         }
         return JSON.parseObject(JSON.toJSONString(result), resultClass);

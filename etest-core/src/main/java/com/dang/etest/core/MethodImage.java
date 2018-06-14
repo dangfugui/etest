@@ -93,7 +93,7 @@ public class MethodImage implements MethodHandler, InvocationHandler {
             if (context.getThrowable() != null) {
                 throw context.getThrowable();
             }
-            return context.doReturn(method);
+            return context.doReturn(method.getReturnType());
         }
         // 创建一个新的方法执行上下文
         context = new MethodContext(key, method, args);
