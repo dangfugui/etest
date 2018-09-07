@@ -1,12 +1,10 @@
 package com.dang.etest.sample;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
@@ -106,6 +104,7 @@ public class EtestTest {
         res = (Map<Student, Student>) toJson2Object(res);
         System.out.println(res);
     }
+
 
     private Object toJson2Object(Object object) {
         MethodContext methodContext = new MethodContext();

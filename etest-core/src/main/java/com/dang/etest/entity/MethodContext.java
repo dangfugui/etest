@@ -134,13 +134,19 @@ public class MethodContext {
         if (result instanceof JSONArray || result instanceof List) {
             if (List.class.isAssignableFrom(returnType) && ((List) result).size() > 0) {
                 return JSON.parseArray(JSON.toJSONString(result), resultClass);
+            } else if (returnType == Object.class) {
+                return result;
             }
         } else if (result instanceof JSONObject) {
             JSONObject jsonObject = (JSONObject) result;
             if (Map.class.isAssignableFrom(returnType)) {
                 return result;
             }
-            return jsonObject.toJavaObject(resultClass);
+            try {
+                return jsonObject.toJavaObject(resultClass);
+            } catch (Throwable throwable) {
+                return JSON.parseObject(JSON.toJSONString(jsonObject), resultClass);
+            }
         }
         return JSON.parseObject(JSON.toJSONString(result), resultClass);
     }
