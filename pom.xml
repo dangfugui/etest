@@ -8,7 +8,7 @@
     <groupId>com.dang.etest</groupId>
     <artifactId>etest</artifactId>
     <packaging>pom</packaging>
-    <version>${etest.version}</version>
+    <version>1.0-SNAPSHOT</version>
 
     <modules>
         <module>etest-core</module>
